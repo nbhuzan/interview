@@ -10,7 +10,6 @@ function myAjax(method,value,url,callback){
         },
         type:method,
         cache:false,
-
         success:function(data) {
             callback(data);
         },

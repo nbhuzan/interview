@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by huzan on 2016/11/22.
  */
-public class ManageAddSubjectForm {
+public class ManageSubjectForm {
     private int id;
     private int kind ;
     private int type;

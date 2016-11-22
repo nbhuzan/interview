@@ -2,7 +2,7 @@ package com.huzan.interview.mapper;
 
 import com.huzan.interview.bean.BasePageBean;
 import com.huzan.interview.bean.SubjectBean;
-import com.huzan.interview.form.ManageAddSubjectForm;
+import com.huzan.interview.form.ManageSubjectForm;
 
 import java.util.List;
 
@@ -11,5 +11,7 @@ import java.util.List;
  */
 public interface SubjectMapper {
     List<SubjectBean> subjectList(BasePageBean pageBean);
-    int subjectAdd(ManageAddSubjectForm form);
+    int subjectAdd(ManageSubjectForm form);
+    SubjectBean getSubject(int id);
+    void subjectUpdate(ManageSubjectForm form);
 }

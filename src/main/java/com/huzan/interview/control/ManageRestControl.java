@@ -1,6 +1,7 @@
 package com.huzan.interview.control;
 
 import com.huzan.interview.bean.BasePageBean;
+import com.huzan.interview.bean.PaperModelBean;
 import com.huzan.interview.bean.SubjectBean;
 import com.huzan.interview.bean.UserBean;
 import com.huzan.interview.form.*;
@@ -13,14 +14,15 @@ import com.huzan.interview.util.MethodUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huzan on 2016/11/21.
@@ -58,11 +60,31 @@ public class ManageRestControl {
      */
     @RequestMapping(value = MethodUtil.METHOD_SUBJECT_REST, method = RequestMethod.POST)
     public String manageAddSubject(@RequestParam(value = "ajaxdata") String json){
-        ManageAddSubjectForm form = GsonUtil.fromJsonNoDecode(json,ManageAddSubjectForm.class);
+        ManageSubjectForm form = GsonUtil.fromJsonNoDecode(json,ManageSubjectForm.class);
         ResultForm resultForm = new ResultForm();
         try (SqlSession session = factory.openSession(true)) {
             SubjectMapper subjectMapper = session.getMapper(SubjectMapper.class);
            subjectMapper.subjectAdd(form);
+            int id = form.getId();
+            if(id>0){
+                resultForm.setCode(Constant.CODE_SUCCESS);
+            }
+        }
+        return GsonUtil.toJsonNoEncode(resultForm);
+    }
+
+    /**
+     * 更新题库
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = MethodUtil.METHOD_SUBJECT_REST,method = RequestMethod.PUT)
+    public String updateSubject(@RequestParam(value = "ajaxdata") String json){
+        ManageSubjectForm form = GsonUtil.fromJsonNoDecode(json,ManageSubjectForm.class);
+        ResultForm resultForm = new ResultForm();
+        try(SqlSession session = factory.openSession(true)){
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            mapper.subjectUpdate(form);
             int id = form.getId();
             if(id>0){
                 resultForm.setCode(Constant.CODE_SUCCESS);
@@ -77,7 +99,7 @@ public class ManageRestControl {
      * @return
      */
     @RequestMapping(value = MethodUtil.METHOD_SUBJECT_REST, method = RequestMethod.GET)
-    public String getSubject(@RequestParam(value = "pageIndex", defaultValue = "1") int pageIndex){
+    public String getSubject(@RequestParam(value = "pageIndex",  defaultValue = "1") int pageIndex){
         ManageResultForm<SubjectBean> resultForm = new ManageResultForm<>();
 
         int pageIndexStart = pageIndex == 1 ? 0 : (pageIndex - 1) * Constant.PAGESIZE + 1;
@@ -124,32 +146,101 @@ public class ManageRestControl {
      */
     @RequestMapping(value = MethodUtil.METHOD_PAGEMODEL_REST, method = RequestMethod.GET)
     public String getPageModel(){
-        ManageResultForm<UserBean> resultForm = new ManageResultForm<>();
+        ManageResultForm<PaperModelBean> resultForm = new ManageResultForm<>();
         resultForm.setCode(Constant.CODE_SUCCESS);
 
-        List list = new ArrayList();
+        List<PaperModelBean> list = new ArrayList();
+        try(SqlSession session = factory.openSession(false)) {
+            PaperModelMapper mapper = session.getMapper(PaperModelMapper.class);
+            list = mapper.getPaperModel();
+        }
+        List outList = new ArrayList();
 
+        for (int i = 0; i < list.size() ; i++) {
+            PaperModelBean pm = list.get(i);
+            Map map = new HashMap();
+            map.put("jobName",pm.getJobName());
+            boolean is = false;
+            for (int j = 0; j < outList.size(); j++) {
+                Map m = (Map) outList.get(j);
+                if(m.get("jobName")!=null&&m.get("jobName").toString().equals(pm.getJobName())){
+                    is=true;
+                    break;
+                }
+            }
+            if(is){
+                continue;
+            }
+
+            StringBuffer sb = new StringBuffer();
+            for (int j = 0; j < list.size(); j++) {
+                PaperModelBean pm1 = list.get(j);
+                if(map.get("jobName").toString().equals(pm1.getJobName())){
+                    sb.append(pm1.getTypeName()+"("+pm1.getNum()+"题),");
+                }
+            }
+            map.put("subject",sb.toString());
+            outList.add(map);
+
+        }
+
+        int page = 1;
+        if (outList.size() % Constant.PAGESIZE != 0) {
+            page += outList.size() / Constant.PAGESIZE;
+        } else {
+            page = outList.size() / Constant.PAGESIZE;
+        }
         resultForm.setTitle("试题模版");
         List tableRank = new ArrayList();
         tableRank.add("试题种类");
         tableRank.add("详情");
+        tableRank.add("操作");
         resultForm.setTableRank(tableRank);
-        resultForm.setList(list);
-
+        resultForm.setList(outList);
+        resultForm.setPage(page);
+        resultForm.setSize(outList.size());
 
 
         return GsonUtil.toJsonNoEncode(resultForm);
     }
 
+    /**
+     * 新增试卷模版
+     * @param json
+     * @return
+     */
     @RequestMapping(value = MethodUtil.METHOD_PAGEMODEL_REST, method = RequestMethod.POST)
     public String addPageModel(@RequestParam(value = "ajaxdata") String json ){
         ManageAddPageModelForm form = GsonUtil.fromJsonNoDecode(json,ManageAddPageModelForm.class);
+        ResultForm resultForm = new ResultForm();
         try(SqlSession session = factory.openSession(false)){
             PaperModelMapper mapper = session.getMapper(PaperModelMapper.class);
+            List<PaperModelBean> tempList = mapper.getPaperModelByJobId(form.getJobId());
+            if(tempList.size()>0){
+                //已存在
+            }else if(tempList.size()==0){
+                //不存在
+                List typeNumList = form.getTypeNumList();
+                List pmList = new ArrayList();
+                for (int i = 0; i < typeNumList.size(); i++) {
+                    Map map = (Map) typeNumList.get(i);
+                    PaperModelBean pm = new PaperModelBean();
+                    pm.setJobId(form.getJobId());
+                    pm.setNum(Integer.parseInt(map.get("num").toString()));
+                    pm.setTypeId(Integer.parseInt(map.get("id").toString()));
+                    pmList.add(pm);
+                }
+                mapper.addPaperModel(pmList);
+                System.out.println(1);
+                session.commit();
+                resultForm.setCode(Constant.CODE_SUCCESS);
 
+            }
         }
-        return "";
+        return GsonUtil.toJsonNoEncode(resultForm);
     }
+
+
 
 
 

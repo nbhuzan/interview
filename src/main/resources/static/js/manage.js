@@ -2,7 +2,8 @@
  * Created by huzan on 2016/11/22.
  */
 function showSubject() {
-    var json = JSON.stringify("");
+    showLoading(true);
+    var json = JSON.stringify(1);
     var url = method_subject_rest;
     myAjax('get',json, url, showSubjectAfter);
 }
@@ -34,27 +35,42 @@ function showSubjectAfter(data) {
             htmlTable+='<td>'+arr['list'][i].typeName+'</td>';
             htmlTable+='<td>'+arr['list'][i].answer+'</td>';
             htmlTable+='<td>'+arr['list'][i].answerNum+'</td>';
-            htmlTable+='<td><span style="color: red">详情</span></td>';
+            htmlTable+='<td>';
+            htmlTable+='<a style="color: dodgerblue" onclick="subjectMsg('+arr["list"][i].id+')">详情</a>';
+            htmlTable+='<a style="color: red;margin-left: 10px">禁用</a>';
+            htmlTable+= '</td>';
             htmlTable+='</tr>';
         }
         $("#table").append(htmlTable);
 
-
-
     }else{
         layer.alert("获取失败");
     }
+    showLoading(false);
 
 }
+var indexSubjectMsg;
+function subjectMsg(index) {
+    indexSubjectMsg = layer.open({
+        type: 2,
+        // skin: 'layui-layer-demo', //样式类名
+        closeBtn: 1, //不显示关闭按钮
+        anim: 2,
+        shadeClose: true, //开启遮罩关闭
+        area: ['800px', '50%'],
+        content: method_updateSubject+"/?id="+index
+    });
+}
 
-function showPageModel() {
-    var json = JSON.stringify("");
+function showPaperModel() {
+    showLoading(true);
+    var json = JSON.stringify(1);
     var url = method_pageModel_rest;
-    myAjax('get',json, url, showSubjectAfter);
+    myAjax('get',json, url, showPaperModelAfter);
 }
 
 
-function showSubjectAfter(data) {
+function showPaperModelAfter(data) {
     data = decodeURIComponent(data);
     var arr = jQuery.parseJSON(data);
     if(arr['code']==code_success){
@@ -75,12 +91,9 @@ function showSubjectAfter(data) {
         //数据
         for (var i = 0;i<arr['list'].length;i++){
             htmlTable+='<tr>';
-            htmlTable+='<td>'+arr['list'][i].description+'</td>';
-            htmlTable+='<td>'+arr['list'][i].kindName+'</td>';
-            htmlTable+='<td>'+arr['list'][i].typeName+'</td>';
-            htmlTable+='<td>'+arr['list'][i].answer+'</td>';
-            htmlTable+='<td>'+arr['list'][i].answerNum+'</td>';
-            htmlTable+='<td><span style="color: red">详情</span></td>';
+            htmlTable+='<td>'+arr['list'][i].jobName+'</td>';
+            htmlTable+='<td>'+arr['list'][i].subject+'</td>';
+            htmlTable+='<td><a style="color: dodgerblue">详情</a></td>';
             htmlTable+='</tr>';
         }
         $("#table").append(htmlTable);
@@ -90,6 +103,7 @@ function showSubjectAfter(data) {
     }else{
         layer.alert("获取失败");
     }
+    showLoading(false);
 
 }
 

@@ -23,9 +23,11 @@
 <body>
 <script>
     $(function () {
-
-        $("#id_add_success").click(function () {
-            addSubject();
+        $("#id_type").val(${info.typeId});
+        $("#id_kind").val(${info.kindId});
+        $("#id_del").val(${info.del});
+        $("#id_update_success").click(function () {
+            updateSubject();
         })
         parent.$(".layui-layer-content iframe").css("height", "500px");
     })
@@ -33,6 +35,14 @@
 
 <div class="container" >
     <div>
+        <input type="hidden" id="id_update_id" value="${info.id}"/>
+        <div class="input-group" style="width: 300px;margin:10px 0 10px 0">
+            <span class="input-group-addon">是否禁用</span>
+            <select class="form-control input-sm" id="id_del">
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
         <div class="input-group" style="float: left;width: 300px">
             <span class="input-group-addon">种类</span>
             <select class="form-control input-sm" id="id_type">
@@ -51,20 +61,20 @@
         </div>
         <div class="input-group" style="float:left;margin-top:10px;width: 300px">
             <span class="input-group-addon">标准答案</span>
-            <input class="form-control" type="email" placeholder="" id="id_answer">
+            <input class="form-control" type="text" placeholder="" value="${info.answer}" id="id_answer">
         </div>
         <div class="input-group" style="margin-left:10px;margin-top:10px;float: left;width: 300px">
             <span class="input-group-addon">答案数量</span>
-            <input class="form-control" type="number" placeholder="" id="id_answerNum">
+            <input class="form-control" type="number" placeholder="" value="${info.answerNum}" id="id_answerNum">
         </div>
 
 
 
         <div style="clear:both"></div>
     </div>
-    <textarea class="form-control" rows="3" id="id_desc" placeholder="请输入问题描述,选项或填空部分换行符隔开。。。"></textarea>
+    <textarea class="form-control" rows="3" id="id_desc"  placeholder="请输入问题描述,选项或填空部分换行符隔开。。。">${info.description}</textarea>
 
-    <button type="button" class="btn btn-success" id="id_add_success">Success</button>
+    <button type="button" class="btn btn-success" id="id_update_success">更新</button>
 </div>
 
 

@@ -2,7 +2,7 @@
  * Created by huzan on 2016/11/22.
  */
 index1=1;
-function addPageModelWindow() {
+function addPaperModelWindow() {
      index1 = layer.open({
         type: 2,
         // skin: 'layui-layer-demo', //样式类名
@@ -14,7 +14,7 @@ function addPageModelWindow() {
     });
 }
 
-function addPageModel() {
+function addPaperModel() {
     var arr = {};
     arr['jobId'] = $("#id_job").val();
     var type = [];
@@ -30,14 +30,18 @@ function addPageModel() {
     arr['typeNumList'] = type;
     var json = JSON.stringify(arr);
     var url = method_pageModel_rest;
-    myAjax('post',json, url, addSubjectAfter);
+    myAjax('post',json, url, addPaperModelAfter);
 }
 
 
-function addSubjectAfter(data) {
+function addPaperModelAfter(data) {
     data = decodeURIComponent(data);
     var arr = jQuery.parseJSON(data);
+    console.info(arr);
     if(arr['code']==code_success){
+
+        window.parent.layer.msg("新增成功");
+        window.parent.showPaperModel();
         parent.layer.close(parent.index1);
     }else{
         layer.alert("新增失败");

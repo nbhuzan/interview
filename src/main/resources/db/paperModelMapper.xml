@@ -7,5 +7,17 @@
     <select id="getPaperModelByJobId" resultType="com.huzan.interview.bean.PaperModelBean">
         select * from paperModel where jobId = #{jobId}
     </select>
+    
+    <select id="getPaperModel" resultType="com.huzan.interview.bean.PaperModelBean">
+        select pm.*,job.*,st.* from paperModel as pm left join job as job on job.id=pm.jobId
+        left join subjectType as st on st.id=pm.typeId
+    </select>
+
+    <insert id="addPaperModel" useGeneratedKeys="true" keyProperty="id" parameterType="com.huzan.interview.bean.PaperModelBean">
+        insert into paperModel (jobId, typeId, num) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.jobId}, #{item.typeId}, #{item.num})
+        </foreach>
+    </insert>
 </mapper>
 

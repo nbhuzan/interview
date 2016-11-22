@@ -4,18 +4,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.huzan.interview.mapper.SubjectMapper">
-    <select id="subjectList" parameterType="com.huzan.interview.bean.BasePageBean" resultType="com.huzan.interview.bean.SubjectBean">
+    <select id="subjectList" parameterType="com.huzan.interview.bean.BasePageBean"
+            resultType="com.huzan.interview.bean.SubjectBean">
         select s.*,st.*,sk.* from subject as s
         left join subjectType as st on s.typeId=st.id
         left join subjectKind as sk on s.kindId=sk.id
         limit ${pageIndexStart},${pageIndexEnd}
     </select>
 
-    <insert id="subjectAdd" parameterType="com.huzan.interview.form.ManageAddSubjectForm" useGeneratedKeys="true" keyProperty="id">
+    <insert id="subjectAdd" parameterType="com.huzan.interview.form.ManageSubjectForm" useGeneratedKeys="true"
+            keyProperty="id">
 
         insert into subject (description,typeId,answer,kindId,answerNum,time)
-         values (#{desc},#{type},#{answer},#{kind},#{answerNum},#{time})
+        values (#{desc},#{type},#{answer},#{kind},#{answerNum},#{time})
     </insert>
+
+    <update id="subjectUpdate" parameterType="com.huzan.interview.form.ManageSubjectForm" useGeneratedKeys="true"
+            keyProperty="id">
+          update subject set
+          description = #{desc},
+          typeId = #{type},
+          answer = #{answer},
+          kindId = #{kind},
+          answerNum = #{answerNum}
+          where id = #{id}
+    </update>
+
+    <select id="getSubject" resultType="com.huzan.interview.bean.SubjectBean">
+        select s.*,st.*,sk.* from subject as s
+        left join subjectType as st on s.typeId=st.id
+        left join subjectKind as sk on s.kindId=sk.id
+        where s.id=#{id}
+    </select>
 
 
 </mapper>

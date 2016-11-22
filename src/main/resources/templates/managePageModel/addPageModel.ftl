@@ -24,8 +24,9 @@
 <script>
     $(function () {
         $("#id_add_success").click(function () {
-            addPageModel();
-        })
+            addPaperModel();
+        });
+        parent.$(".layui-layer-content iframe").css("height", "500px");
     });
 
 </script>

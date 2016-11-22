@@ -15,6 +15,15 @@ public class SubjectBean {
     private Date time;
     private String typeName;
     private String kindName;
+    private int del;
+
+    public int getDel() {
+        return del;
+    }
+
+    public void setDel(int del) {
+        this.del = del;
+    }
 
     public String getTypeName() {
         return typeName;

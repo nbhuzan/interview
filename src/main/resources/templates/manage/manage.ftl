@@ -34,7 +34,7 @@
             if (menu == top_menu_subject) {
                 addSubjectWindow();
             } else if (menu == top_menu_model) {
-                addPageModelWindow();
+                addPaperModelWindow();
             } else if (menu == top_menu_record) {
 
             }
@@ -47,9 +47,9 @@
         if (index == top_menu_subject) {
             showSubject();
         } else if (index == top_menu_model) {
-            showPageModel();
-        } else if (index == top_menu_record) {
+            showPaperModel();
 
+        } else if (index == top_menu_record) {
         }
     }
 </script>
@@ -91,29 +91,17 @@
                 <div style="clear:both"></div>
                 <div class="btn-group" style="float: right">
                     <button type="button" id="id_add_subject" class="btn btn-default">新增</button>
-                    <button type="button" id="id_update_subject" class="btn btn-default">修改</button>
-                    <button type="button" id="id_del_subject" class="btn btn-default">禁用</button>
+                    <#--<button type="button" id="id_update_subject" class="btn btn-default">修改</button>-->
+                    <#--<button type="button" id="id_del_subject" class="btn btn-default">禁用</button>-->
                 </div>
 
             </div>
             <!-- Table -->
             <table class="table">
                 <tbody id="table">
-                <#--<#list tableRank as tr>-->
-                    <#--<th>${tr}</th>-->
-                <#--</#list>-->
+
                 </tbody>
 
-            <#--<#list list as l>-->
-                    <#--<tr>-->
-                    <#--<td>${l.description}</td>-->
-                    <#--<td>${l.kindName}</td>-->
-                    <#--<td>${l.typeName}</td>-->
-                    <#--<td>${l.answer}</td>-->
-                    <#--<td>${l.answerNum}</td>-->
-                    <#--<td><span style="color: red">详情</span></td>-->
-                <#--</tr>-->
-            <#--</#list>-->
             </table>
 
         </div>
