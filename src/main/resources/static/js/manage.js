@@ -172,6 +172,52 @@ function paperModelMsg(index) {
 }
 
 
+function showRecordModel() {
+    showLoading(true);
+    var json = JSON.stringify(1);
+    var url = method_record_rest;
+    myAjax('get',json, url, showRecordModelAfter);
+}
+
+
+function showRecordModelAfter(data) {
+    data = decodeURIComponent(data);
+    var arr = jQuery.parseJSON(data);
+    if(arr['code']==code_success){
+        console.info(arr);
+        showData(arr);
+        $("#table").empty();
+        //列名
+        var htmlTable='<tr>';
+        for(var i=0;i<arr['tableRank'].length;i++){
+            htmlTable+='<th>'+arr['tableRank'][i]+'</th>';
+        }
+        htmlTable+='</tr>';
+
+
+        //数据
+        for (var i = 0;i<arr['list'].length;i++){
+            htmlTable+='<tr>';
+            htmlTable+='<td>'+arr['list'][i].name+'</td>';
+            htmlTable+='<td>'+arr['list'][i].phone+'</td>';
+            htmlTable+='<td>'+arr['list'][i].jobName+'</td>';
+            htmlTable+='<td>'+arr['list'][i].score+'</td>';
+            htmlTable+='<td>'+arr['list'][i].sTime+'</td>';
+            htmlTable+='<td>'+arr['list'][i].eTime+'</td>';
+            htmlTable+='<td><a style="color: dodgerblue" onclick="paperModelMsg('+arr['list'][i].id+')">详情</a></td>';
+            htmlTable+='</tr>';
+        }
+        $("#table").append(htmlTable);
+
+
+
+    }else{
+        layer.alert("获取失败");
+    }
+    showLoading(false);
+
+}
+
 function showData(arr) {
 
     //标题

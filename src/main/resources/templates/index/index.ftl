@@ -30,7 +30,7 @@
         $("#login_submit").click(function () {
             login();
         })
-    })
+    });
     function login() {
         var arr = {};
         arr['name'] = $("#id_login_name").val();

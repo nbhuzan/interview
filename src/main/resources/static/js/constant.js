@@ -12,6 +12,7 @@ var method_addPaperModel = vision+'/manage/addPaperModel';
 var method_updatePaperModel = vision+'/manage/updatePaperModel';
 var method_subject_rest = vision+'/manage/subject';
 var method_paperModel_rest = vision+'/manage/paperModel';
+var method_record_rest = vision+'/manage/record';
 var method_manage_login = vision+'/manage/index';
 var method_examination = vision+'/examination';
 

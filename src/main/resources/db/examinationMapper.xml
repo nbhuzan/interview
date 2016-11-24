@@ -11,8 +11,22 @@
     </insert>
     
     <select id="getExaminationBypaperId" resultType="com.huzan.interview.bean.ExaminationBean">
+        select e.*,s.*,sk.*,st.* from examination as e left join subject as s on e.subjectId = s .id left join subjectKind as sk on sk.id=s.kindId left join subjectType as st on st.id=s.typeId where e.paperId=#{paperId} and e.respond is null
+    </select>
+
+    <select id="getExaminationRecordBypaperId" resultType="com.huzan.interview.bean.ExaminationBean">
         select e.*,s.*,sk.*,st.* from examination as e left join subject as s on e.subjectId = s .id left join subjectKind as sk on sk.id=s.kindId left join subjectType as st on st.id=s.typeId where e.paperId=#{paperId}
     </select>
+
+
+
+    <update id="submitRespond" parameterType="com.huzan.interview.bean.ExaminationBean" useGeneratedKeys="true"
+            keyProperty="id">
+        update examination set
+        respond = #{respond},
+        score = #{score}
+        where id = #{id}
+    </update>
 
 </mapper>
 

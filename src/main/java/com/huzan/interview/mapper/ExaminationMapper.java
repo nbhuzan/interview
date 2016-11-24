@@ -11,4 +11,6 @@ import java.util.List;
 public interface ExaminationMapper {
     void addExamination(List<ExaminationBean> examinationBeanList);
     List<ExaminationBean> getExaminationBypaperId(int paperId);
+    List<ExaminationBean> getExaminationRecordBypaperId(int paperId);
+    void submitRespond(ExaminationBean examinationBean);
 }

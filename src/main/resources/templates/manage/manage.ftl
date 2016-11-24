@@ -43,7 +43,6 @@
             } else if (menu == top_menu_model) {
                 addPaperModelWindow();
             } else if (menu == top_menu_record) {
-
             }
 
         });
@@ -57,6 +56,7 @@
             showPaperModel();
 
         } else if (index == top_menu_record) {
+            showRecordModel();
         }
     }
 </script>

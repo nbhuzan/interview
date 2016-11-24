@@ -1,6 +1,7 @@
 package com.huzan.interview.control;
 
 import com.huzan.interview.bean.*;
+import com.huzan.interview.form.ExaminationForm;
 import com.huzan.interview.form.LoginForm;
 import com.huzan.interview.mapper.*;
 import com.huzan.interview.util.GsonUtil;
@@ -41,7 +42,7 @@ public class IndexControl {
 
 
     @RequestMapping(value = MethodUtil.METHOD_EXAMINATION, method = RequestMethod.GET)
-    public String startExamination(@ModelAttribute LoginForm form) {
+    public String startExamination(@ModelAttribute LoginForm form,Model model) {
         List<ExaminationBean> ebList = new ArrayList<>();//试题列表（考试）
         try (SqlSession session = factory.openSession(false)) {
             PaperMapper paperMapper = session.getMapper(PaperMapper.class);
@@ -51,7 +52,7 @@ public class IndexControl {
 
 
             //意外情况（eg:停电，不小心关闭网页）获取当天试卷
-            PaperBean pb = paperMapper.getPaperByUserId(form.getId(),form.getJobId());
+            PaperBean pb = paperMapper.getTodayPaperByUserId(form.getId(),form.getJobId());
             if (pb != null) {
                 ebList = examinationMapper.getExaminationBypaperId(pb.getId());
                 System.out.println(1);
@@ -87,10 +88,13 @@ public class IndexControl {
 
                 examinationMapper.addExamination(listSubjectId);
                 ebList = examinationMapper.getExaminationBypaperId(paperBean.getId());
-//            session.commit();
+            session.commit();
             }
         }
-        return "";
+        ExaminationForm resultForm = new ExaminationForm() ;
+        resultForm.setList(ebList);
+        model.addAttribute("list",GsonUtil.toJsonNoEncode(resultForm));
+        return "index/examination";
     }
 
 

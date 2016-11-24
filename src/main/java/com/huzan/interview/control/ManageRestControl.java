@@ -1,16 +1,12 @@
 package com.huzan.interview.control;
 
-import com.huzan.interview.bean.BasePageBean;
-import com.huzan.interview.bean.PaperModelBean;
-import com.huzan.interview.bean.SubjectBean;
-import com.huzan.interview.bean.UserBean;
+import com.huzan.interview.bean.*;
 import com.huzan.interview.form.*;
-import com.huzan.interview.mapper.PaperModelMapper;
-import com.huzan.interview.mapper.SubjectMapper;
-import com.huzan.interview.mapper.UserMapper;
+import com.huzan.interview.mapper.*;
 import com.huzan.interview.util.Constant;
 import com.huzan.interview.util.GsonUtil;
 import com.huzan.interview.util.MethodUtil;
+import com.huzan.interview.util.TimeFormatUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -321,6 +317,67 @@ public class ManageRestControl {
                 resultForm.setCode(Constant.CODE_SUCCESS);
             }
         }
+        return GsonUtil.toJsonNoEncode(resultForm);
+    }
+
+    /**
+     * 获取考试记录
+     * @return
+     */
+    @RequestMapping(value = MethodUtil.METHOD_RECORD_REST, method = RequestMethod.GET)
+    public String getRecord(){
+        ManageResultForm<PaperBean> resultForm = new ManageResultForm<>();
+        List<PaperBean> paperList = new ArrayList<>();
+        try(SqlSession session = factory.openSession()){
+            PaperMapper paperMapper = session.getMapper(PaperMapper.class);
+            ExaminationMapper examinationMapper = session.getMapper(ExaminationMapper.class);
+            paperList = paperMapper.getPaperList();
+            for (int i = 0; i < paperList.size() ; i++) {
+                PaperBean p = paperList.get(i);
+
+
+
+                double score = 0;
+                int answerNum = 0;
+                List<ExaminationBean> subjectList =  examinationMapper.getExaminationRecordBypaperId(p.getId());
+                for (int j = 0; j < subjectList.size(); j++) {
+                    ExaminationBean eb = subjectList.get(j);
+                    score+= eb.getScore();
+                    answerNum += eb.getAnswerNum();
+                }
+                p.setScore(new Double(score/answerNum*100).intValue());
+                if(p.getStartTime()!=null){
+                    p.setsTime(TimeFormatUtil.dateToString(p.getStartTime(),1));
+                }else{
+                    p.setsTime("");
+                }
+                if (p.getEndTime() != null) {
+                    p.seteTime(TimeFormatUtil.dateToString(p.getEndTime(), 1));
+                } else {
+                    p.seteTime("");
+                }
+            }
+
+        }
+        int page = 1;
+        if (paperList.size() % Constant.PAGESIZE != 0) {
+            page += paperList.size() / Constant.PAGESIZE;
+        } else {
+            page = paperList.size() / Constant.PAGESIZE;
+        }
+        resultForm.setCode(Constant.CODE_SUCCESS);
+        resultForm.setTitle("考试记录");
+        List tableRank = new ArrayList();
+        tableRank.add("姓名");
+        tableRank.add("电话");
+        tableRank.add("申请岗位");
+        tableRank.add("得分");
+        tableRank.add("开始时间");
+        tableRank.add("结束时间");
+        resultForm.setTableRank(tableRank);
+        resultForm.setList(paperList);
+        resultForm.setPage(page);
+        resultForm.setSize(paperList.size());
         return GsonUtil.toJsonNoEncode(resultForm);
     }
 

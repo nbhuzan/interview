@@ -11,6 +11,22 @@
         select * from paper where userId=#{0} and jobId=#{1} and STR_TO_DATE(now(),'%Y-%m-%d')!=STR_TO_DATE(startTime,'%Y-%m-%d')
     </select>
 
+    <select id="getTodayPaperByUserId" resultType="com.huzan.interview.bean.PaperBean">
+        select * from paper where userId=#{0} and jobId=#{1} and STR_TO_DATE(now(),'%Y-%m-%d')=STR_TO_DATE(startTime,'%Y-%m-%d')
+    </select>
+
+
+    <update id="endPaper" parameterType="com.huzan.interview.bean.PaperBean" useGeneratedKeys="true"
+            keyProperty="id">
+        update paper set
+        endTime = #{endTime}
+        where id = #{id}
+    </update>
+    
+    <select id="getPaperList" resultType="com.huzan.interview.bean.PaperBean">
+        select p.*,j.*,u.* from paper as p left join job as j on p.jobId = j.id left join user as u on u.id = p.userId
+    </select>
+
 
 
 </mapper>

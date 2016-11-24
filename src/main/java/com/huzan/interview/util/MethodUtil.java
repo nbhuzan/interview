@@ -15,6 +15,7 @@ public class MethodUtil {
 
     public static final String METHOD_SUBJECT_REST = VISION+"/manage/subject";
     public static final String METHOD_PAPERMODEL_REST = VISION+"/manage/paperModel";
+    public static final String METHOD_RECORD_REST = VISION+"/manage/record";
 
     public static final String METHOD_LOGIN_REST = VISION+"/index";
 
