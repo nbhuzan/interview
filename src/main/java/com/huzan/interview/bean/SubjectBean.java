@@ -17,6 +17,7 @@ public class SubjectBean {
     private String kindName;
     private int del;
 
+
     public int getDel() {
         return del;
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huzan.interview.mapper.ExaminationMapper">
+    <insert id="addExamination" useGeneratedKeys="true" keyProperty="id" parameterType="com.huzan.interview.bean.ExaminationBean">
+        insert into examination (paperId, respond, subjectId,score) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.paperId}, #{item.respond}, #{item.subjectId},#{item.score})
+        </foreach>
+    </insert>
+    
+    <select id="getExaminationBypaperId" resultType="com.huzan.interview.bean.ExaminationBean">
+        select e.*,s.*,sk.*,st.* from examination as e left join subject as s on e.subjectId = s .id left join subjectKind as sk on sk.id=s.kindId left join subjectType as st on st.id=s.typeId where e.paperId=#{paperId}
+    </select>
+
+</mapper>
+

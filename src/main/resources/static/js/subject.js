@@ -41,6 +41,7 @@ function addSubjectAfter(data) {
         layer.alert("新增失败");
     }
 
+
 }
 
 function updateSubject() {
@@ -71,6 +72,7 @@ function updateSubjectAfter(data) {
     }else{
         layer.alert("更新失败");
     }
+    
 
 }
 

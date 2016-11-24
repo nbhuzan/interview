@@ -11,4 +11,6 @@ public interface PaperModelMapper {
     List<PaperModelBean> getPaperModelByJobId(int jobId);
     int addPaperModel(List<PaperModelBean> paperModelBeanList);
     List<PaperModelBean> getPaperModel();
+    int delPaperModel(int jobId);
+
 }

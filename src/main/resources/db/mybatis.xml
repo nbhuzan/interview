@@ -27,5 +27,7 @@
         <mapper resource="db/subjectTypeMapper.xml"/>
         <mapper resource="db/jobMapper.xml"/>
         <mapper resource="db/paperModelMapper.xml"/>
+        <mapper resource="db/paperMapper.xml"/>
+        <mapper resource="db/examinationMapper.xml"/>
     </mappers>
 </configuration>

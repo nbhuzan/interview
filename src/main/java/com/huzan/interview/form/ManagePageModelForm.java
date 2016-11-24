@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by huzan on 2016/11/22.
  */
-public class ManageAddPageModelForm {
+public class ManagePageModelForm {
     private int jobId;
     private List typeNumList;
 

@@ -26,6 +26,7 @@
           typeId = #{type},
           answer = #{answer},
           kindId = #{kind},
+          del = #{del},
           answerNum = #{answerNum}
           where id = #{id}
     </update>
@@ -34,7 +35,11 @@
         select s.*,st.*,sk.* from subject as s
         left join subjectType as st on s.typeId=st.id
         left join subjectKind as sk on s.kindId=sk.id
-        where s.id=#{id}
+        where s.id=#{id} and s.del=0
+    </select>
+
+    <select id="getSubjectByTypeId" resultType="com.huzan.interview.bean.SubjectBean">
+        select * from subject where typeId=#{0}
     </select>
 
 

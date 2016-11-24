@@ -7,6 +7,7 @@ public class JobBean {
     private int id;
     private String jobName;
 
+
     public int getId() {
         return id;
     }

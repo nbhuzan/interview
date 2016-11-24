@@ -13,6 +13,16 @@
         left join subjectType as st on st.id=pm.typeId
     </select>
 
+    <!--<select id="getPaperModelById" resultType="com.huzan.interview.bean.PaperModelBean">-->
+        <!--select pm.*,job.*,st.* from paperModel as pm left join job as job on job.id=pm.jobId-->
+        <!--left join subjectType as st on st.id=pm.typeId where pm.id = #{id}-->
+    <!--</select>-->
+    <delete id="delPaperModel">
+        delete from paperModel where jobId = #{jobId}
+    </delete>
+
+
+
     <insert id="addPaperModel" useGeneratedKeys="true" keyProperty="id" parameterType="com.huzan.interview.bean.PaperModelBean">
         insert into paperModel (jobId, typeId, num) values
         <foreach item="item" collection="list" separator=",">

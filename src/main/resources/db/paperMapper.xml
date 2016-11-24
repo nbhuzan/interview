@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huzan.interview.mapper.PaperMapper">
+    <insert id="addPaper" useGeneratedKeys="true" keyProperty="id">
+    insert into paper (userId,jobId,startTime) values (#{userId},#{jobId},#{startTime})
+    </insert>
+
+    <select id="getPaperByUserId" resultType="com.huzan.interview.bean.PaperBean">
+        select * from paper where userId=#{0} and jobId=#{1} and STR_TO_DATE(now(),'%Y-%m-%d')!=STR_TO_DATE(startTime,'%Y-%m-%d')
+    </select>
+
+
+
+</mapper>
+

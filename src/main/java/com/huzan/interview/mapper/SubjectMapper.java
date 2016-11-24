@@ -11,7 +11,9 @@ import java.util.List;
  */
 public interface SubjectMapper {
     List<SubjectBean> subjectList(BasePageBean pageBean);
+    List<SubjectBean> getSubjectByTypeId(int typeId);
     int subjectAdd(ManageSubjectForm form);
     SubjectBean getSubject(int id);
     void subjectUpdate(ManageSubjectForm form);
+
 }

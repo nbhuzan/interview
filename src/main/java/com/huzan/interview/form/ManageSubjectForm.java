@@ -13,6 +13,15 @@ public class ManageSubjectForm {
     private int answerNum;
     private String desc;
     private Date time;
+    private int del;
+
+    public int getDel() {
+        return del;
+    }
+
+    public void setDel(int del) {
+        this.del = del;
+    }
 
     public int getId() {
         return id;

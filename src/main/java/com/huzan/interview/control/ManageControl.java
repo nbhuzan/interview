@@ -24,6 +24,11 @@ public class ManageControl {
     @Autowired
     SqlSessionFactory factory;
 
+    @RequestMapping("/manage")
+    public String manageIndex() {
+        return "index/manageIndex";
+    }
+
     @RequestMapping(value = "manage/manage", method = RequestMethod.GET)
     public String index(@RequestParam(value = "pageIndex", defaultValue = "1") int pageIndex,
                         Model model) {

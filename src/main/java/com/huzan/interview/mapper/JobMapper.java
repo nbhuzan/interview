@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface JobMapper {
     List<JobBean> getJob();
+    JobBean getJobById(int id);
 }

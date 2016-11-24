@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!-- <link rel="icon" href="../../favicon.ico"> -->
 
-    <title>Signin Template for Bootstrap</title>
+    <title>笔试系统</title>
 
     <link rel="stylesheet/less" type="text/css" href="/less/sign.less">
 
@@ -17,38 +16,65 @@
 
 
     <script type="text/javascript" src="/js/less.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/json.js"></script>
+    <script src="/js/ajax.js"></script>
+    <script src="/js/constant.js"></script>
+    <script src="/layer/layer.js"></script>
 
-    <!-- Custom styles for this template -->
-    <#--<link href="../css/signin.css" rel="stylesheet">-->
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
+<script>
+    $(function () {
+        $("#login_submit").click(function () {
+            login();
+        })
+    })
+    function login() {
+        var arr = {};
+        arr['name'] = $("#id_login_name").val();
+        arr['phone'] = $("#id_login_phone").val();
+        arr['jobId'] = $("#id_job").val();
+        var json = JSON.stringify(arr);
+        var url = method_login;
+        myAjax('post',json, url, loginAfter);
+    }
+
+    function loginAfter(data) {
+        data = decodeURIComponent(data);
+        var arr = jQuery.parseJSON(data);
+        console.info(arr);
+        if(arr['code']==code_success){
+            var form = decodeURIComponent(arr['msg']);
+            form = jQuery.parseJSON(form);
+            console.info(form);
+            location.href=method_examination+"/?id="+form.id+"&jobId="+form.jobId;
+        }else if(arr['code']==code_error){
+            layer.alert(arr['msg']);
+        }else{
+            layer.alert("错误");
+        }
+    }
+</script>
 
 <div class="container">
-    <form class="form-signin" role="form">
+    <div class="form-signin">
         <h2 class="form-signin-heading">填写基本信息</h2>
-        <input type="text" class="form-control" placeholder="姓名" required autofocus>
-        <input type="text" class="form-control" placeholder="手机号" required>
-        <select class="form-control" >
+        <input type="text" class="form-control" id="id_login_name" placeholder="姓名" required autofocus>
+        <input type="text" class="form-control" id="id_login_phone" placeholder="手机号" required>
+        <select class="form-control" id="id_job" >
             <option>选择应聘岗位</option>
             <#list list as list>
-                <option>${list.jobName}</option>
+                <option value="${list.id}">${list.jobName}</option>
             </#list>
 
         </select>
         <div class="checkbox">
-            <!-- <label>
-              <input type="checkbox" value="remember-me"> Remember me
-            </label> -->
+
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">开始笔试</button>
-    </form>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="login_submit">开始笔试</button>
+    </>
 
 </div> <!-- /container -->
 

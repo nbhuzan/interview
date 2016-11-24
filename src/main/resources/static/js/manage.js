@@ -37,7 +37,11 @@ function showSubjectAfter(data) {
             htmlTable+='<td>'+arr['list'][i].answerNum+'</td>';
             htmlTable+='<td>';
             htmlTable+='<a style="color: dodgerblue" onclick="subjectMsg('+arr["list"][i].id+')">详情</a>';
-            htmlTable+='<a style="color: red;margin-left: 10px">禁用</a>';
+            if(arr["list"][i].del==subject_del_n) {
+                htmlTable += '<a style="color: red;margin-left: 10px" onclick="subjectDel(' + arr["list"][i].id + ')">禁用</a>';
+            }else if(arr["list"][i].del==subject_del_y){
+                htmlTable += '<a style="color: green;margin-left: 10px" onclick="subjectDisDel(' + arr["list"][i].id + ')">解禁</a>';
+            }
             htmlTable+= '</td>';
             htmlTable+='</tr>';
         }
@@ -57,15 +61,66 @@ function subjectMsg(index) {
         closeBtn: 1, //不显示关闭按钮
         anim: 2,
         shadeClose: true, //开启遮罩关闭
-        area: ['800px', '50%'],
+        area: ['80%', '50%'],
         content: method_updateSubject+"/?id="+index
     });
 }
 
+function subjectDel(index) {
+    layer.confirm('是否禁用本题,？', {
+        btn: ['是的','取消'] //按钮
+    }, function(){
+        var arr = {};
+        arr['id'] = index;
+        var json = JSON.stringify(arr);
+        var url = "/manage/deleteSubject";
+        myAjax('get',json, url, subjectDelAfter);
+    }, function(){
+        return;
+    });
+}
+function subjectDelAfter(data) {
+    data = decodeURIComponent(data);
+    var arr = jQuery.parseJSON(data);
+    if(arr['code']==code_success){
+        layer.msg("禁用成功");
+        showSubject();
+    }else{
+        layer.msg("禁用失败");
+
+    }
+}
+function subjectDisDel(index) {
+    layer.confirm('是否将本题解禁,？', {
+        btn: ['是的','取消'] //按钮
+    }, function(){
+        var arr = {};
+        arr['id'] = index;
+        var json = JSON.stringify(arr);
+        var url = method_subject_rest;
+        myAjax('patch',json, url, subjectDisDelAfter);
+    }, function(){
+        return;
+    });
+}
+
+function subjectDisDelAfter(data) {
+    data = decodeURIComponent(data);
+    var arr = jQuery.parseJSON(data);
+    if(arr['code']==code_success){
+        layer.msg("解禁成功");
+        showSubject();
+    }else{
+        layer.msg("解禁失败");
+
+    }
+}
+
+
 function showPaperModel() {
     showLoading(true);
     var json = JSON.stringify(1);
-    var url = method_pageModel_rest;
+    var url = method_paperModel_rest;
     myAjax('get',json, url, showPaperModelAfter);
 }
 
@@ -76,9 +131,6 @@ function showPaperModelAfter(data) {
     if(arr['code']==code_success){
         console.info(arr);
         showData(arr);
-
-
-
         $("#table").empty();
         //列名
         var htmlTable='<tr>';
@@ -93,7 +145,7 @@ function showPaperModelAfter(data) {
             htmlTable+='<tr>';
             htmlTable+='<td>'+arr['list'][i].jobName+'</td>';
             htmlTable+='<td>'+arr['list'][i].subject+'</td>';
-            htmlTable+='<td><a style="color: dodgerblue">详情</a></td>';
+            htmlTable+='<td><a style="color: dodgerblue" onclick="paperModelMsg('+arr['list'][i].id+')">详情</a></td>';
             htmlTable+='</tr>';
         }
         $("#table").append(htmlTable);
@@ -105,6 +157,18 @@ function showPaperModelAfter(data) {
     }
     showLoading(false);
 
+}
+var indexPaperModelMsg;
+function paperModelMsg(index) {
+    indexPaperModelMsg = layer.open({
+        type: 2,
+        // skin: 'layui-layer-demo', //样式类名
+        closeBtn: 1, //不显示关闭按钮
+        anim: 2,
+        shadeClose: true, //开启遮罩关闭
+        area: ['800px', '50%'],
+        content: method_updatePaperModel+"/?id="+index
+    });
 }
 
 

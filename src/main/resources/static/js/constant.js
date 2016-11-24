@@ -8,10 +8,17 @@ var code_manageLoginError = 101;
 var vision = '/v1';
 var method_addSubject = vision+'/manage/addSubject';
 var method_updateSubject = vision+'/manage/updateSubject';
-var method_addPageModel = vision+'/manage/addPageModel';
+var method_addPaperModel = vision+'/manage/addPaperModel';
+var method_updatePaperModel = vision+'/manage/updatePaperModel';
 var method_subject_rest = vision+'/manage/subject';
-var method_pageModel_rest = vision+'/manage/pageModel';
+var method_paperModel_rest = vision+'/manage/paperModel';
 var method_manage_login = vision+'/manage/index';
+var method_examination = vision+'/examination';
+
+var method_login = vision+'/index';
+
+var subject_del_y=1;
+var subject_del_n=0;
 
 /**
  * 顶部菜单index
@@ -22,6 +29,9 @@ var top_menu_model=2;
 var top_menu_record=3;
 
 
+/**
+ * loading
+ */
 var myLayerLoad;
 function showLoading(is) {
     if(is) {

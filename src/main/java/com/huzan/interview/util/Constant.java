@@ -10,4 +10,10 @@ public class Constant {
     public static final int CODE_MANAGE_LOGIN_ERROR = CODE_BASE_LOGIN+1;
 
     public static final int PAGESIZE = 10;
+
+    /**
+     * 是否禁用题库
+     */
+    public static final int SUBJECT_DEL_Y=1;
+    public static final int SUBJECT_DEL_N=0;
 }

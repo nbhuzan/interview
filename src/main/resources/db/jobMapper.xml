@@ -6,5 +6,10 @@
     <select id="getJob" resultType="com.huzan.interview.bean.JobBean">
     select * from job
     </select>
+
+    <select id="getJobById" resultType="com.huzan.interview.bean.JobBean">
+    select * from job where id=#{id}
+    </select>
+
 </mapper>
 

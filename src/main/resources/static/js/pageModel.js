@@ -10,7 +10,7 @@ function addPaperModelWindow() {
         anim: 2,
         shadeClose: true, //开启遮罩关闭
         area: ['800px', '50%'],
-        content: method_addPageModel
+        content: method_addPaperModel
     });
 }
 
@@ -29,9 +29,11 @@ function addPaperModel() {
     });
     arr['typeNumList'] = type;
     var json = JSON.stringify(arr);
-    var url = method_pageModel_rest;
+    var url = method_paperModel_rest;
     myAjax('post',json, url, addPaperModelAfter);
 }
+
+
 
 
 function addPaperModelAfter(data) {
@@ -48,3 +50,44 @@ function addPaperModelAfter(data) {
     }
 
 }
+
+
+function updatePaperModel() {
+    var arr = {};
+    arr['jobId'] = $("#id_job").attr("jobid");
+    var type = [];
+    $('input[class="form-control"]').each(function(){
+        $this=$(this);
+        console.info($this);
+        type.push({
+            id:$this.attr('typeid'),
+            num:$this.val()
+        })
+
+    });
+    arr['typeNumList'] = type;
+    console.info(arr);
+    var json = JSON.stringify(arr);
+    var url = method_paperModel_rest;
+    myAjax('put',json, url, updatePaperModelAfter);
+}
+
+
+
+
+function updatePaperModelAfter(data) {
+    data = decodeURIComponent(data);
+    var arr = jQuery.parseJSON(data);
+    console.info(arr);
+    if(arr['code']==code_success){
+
+        window.parent.layer.msg("更新成功");
+        window.parent.showPaperModel();
+        parent.layer.close(parent.indexPaperModelMsg);
+    }else{
+        layer.alert("更新失败");
+    }
+
+}
+
+

@@ -10,5 +10,16 @@
     <select id="manageLogin" resultType="com.huzan.interview.bean.UserBean">
         select * from user where name = #{0} and password = #{1}
     </select>
+
+    <select id="selectUserByNameAndPhone" parameterType="com.huzan.interview.form.LoginForm" resultType="com.huzan.interview.bean.UserBean" >
+            select * from user where name = #{name} and phone = #{phone}
+    </select>
+    
+    <insert id="saveUser" parameterType="com.huzan.interview.form.LoginForm" useGeneratedKeys="true"
+            keyProperty="id">
+            insert into user (name,phone) VALUES (#{name},#{phone})
+    </insert>
+
+    
 </mapper>
 

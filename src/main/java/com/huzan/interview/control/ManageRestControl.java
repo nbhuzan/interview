@@ -93,6 +93,56 @@ public class ManageRestControl {
         return GsonUtil.toJsonNoEncode(resultForm);
     }
 
+    /**
+     * 禁用题库
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "manage/deleteSubject",method = RequestMethod.GET)
+    public String deleteSubject(@RequestParam(value = "ajaxdata") String json){
+        ManageSubjectForm form = GsonUtil.fromJsonNoDecode(json,ManageSubjectForm.class);
+        ResultForm resultForm = new ResultForm();
+        try(SqlSession session = factory.openSession(true)){
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            SubjectBean bean = mapper.getSubject(form.getId());
+            form.setAnswer(bean.getAnswer());
+            form.setAnswerNum(bean.getAnswerNum());
+            form.setDesc(bean.getDescription());
+            form.setKind(bean.getKindId());
+            form.setType(bean.getTypeId());
+            form.setDel(Constant.SUBJECT_DEL_Y);
+            mapper.subjectUpdate(form);
+            resultForm.setCode(Constant.CODE_SUCCESS);
+        }
+        return GsonUtil.toJsonNoEncode(resultForm);
+    }
+
+    /**
+     * 解禁题库
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = MethodUtil.METHOD_SUBJECT_REST,method = RequestMethod.PATCH)
+    public String disDeleteSubject(@RequestParam(value = "ajaxdata") String json){
+        ManageSubjectForm form = GsonUtil.fromJsonNoDecode(json,ManageSubjectForm.class);
+        ResultForm resultForm = new ResultForm();
+        try(SqlSession session = factory.openSession(true)){
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            SubjectBean bean = mapper.getSubject(form.getId());
+            form.setAnswer(bean.getAnswer());
+            form.setAnswerNum(bean.getAnswerNum());
+            form.setDesc(bean.getDescription());
+            form.setKind(bean.getKindId());
+            form.setType(bean.getTypeId());
+            form.setDel(Constant.SUBJECT_DEL_N);
+            mapper.subjectUpdate(form);
+            resultForm.setCode(Constant.CODE_SUCCESS);
+        }
+        return GsonUtil.toJsonNoEncode(resultForm);
+    }
+
+
+
 
     /**
      * 获取题库
@@ -144,7 +194,7 @@ public class ManageRestControl {
      * 获取试卷模版
      * @return
      */
-    @RequestMapping(value = MethodUtil.METHOD_PAGEMODEL_REST, method = RequestMethod.GET)
+    @RequestMapping(value = MethodUtil.METHOD_PAPERMODEL_REST, method = RequestMethod.GET)
     public String getPageModel(){
         ManageResultForm<PaperModelBean> resultForm = new ManageResultForm<>();
         resultForm.setCode(Constant.CODE_SUCCESS);
@@ -159,6 +209,7 @@ public class ManageRestControl {
         for (int i = 0; i < list.size() ; i++) {
             PaperModelBean pm = list.get(i);
             Map map = new HashMap();
+            map.put("id",pm.getJobId());
             map.put("jobName",pm.getJobName());
             boolean is = false;
             for (int j = 0; j < outList.size(); j++) {
@@ -209,9 +260,9 @@ public class ManageRestControl {
      * @param json
      * @return
      */
-    @RequestMapping(value = MethodUtil.METHOD_PAGEMODEL_REST, method = RequestMethod.POST)
-    public String addPageModel(@RequestParam(value = "ajaxdata") String json ){
-        ManageAddPageModelForm form = GsonUtil.fromJsonNoDecode(json,ManageAddPageModelForm.class);
+    @RequestMapping(value = MethodUtil.METHOD_PAPERMODEL_REST, method = RequestMethod.POST)
+    public String addPaperModel(@RequestParam(value = "ajaxdata") String json ){
+        ManagePageModelForm form = GsonUtil.fromJsonNoDecode(json,ManagePageModelForm.class);
         ResultForm resultForm = new ResultForm();
         try(SqlSession session = factory.openSession(false)){
             PaperModelMapper mapper = session.getMapper(PaperModelMapper.class);
@@ -235,6 +286,39 @@ public class ManageRestControl {
                 session.commit();
                 resultForm.setCode(Constant.CODE_SUCCESS);
 
+            }
+        }
+        return GsonUtil.toJsonNoEncode(resultForm);
+    }
+
+    /**
+     * 修改试卷模版
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = MethodUtil.METHOD_PAPERMODEL_REST, method = RequestMethod.PUT)
+    public String updatePaperModel(@RequestParam(value = "ajaxdata") String json ){
+        ManagePageModelForm form = GsonUtil.fromJsonNoDecode(json,ManagePageModelForm.class);
+        ResultForm resultForm = new ResultForm();
+        try(SqlSession session = factory.openSession(false)){
+            PaperModelMapper mapper = session.getMapper(PaperModelMapper.class);
+            int x = mapper.delPaperModel(form.getJobId());
+            System.out.println(x);
+            if(x==form.getTypeNumList().size()){
+                List typeNumList = form.getTypeNumList();
+                List pmList = new ArrayList();
+                for (int i = 0; i < typeNumList.size(); i++) {
+                    Map map = (Map) typeNumList.get(i);
+                    PaperModelBean pm = new PaperModelBean();
+                    pm.setJobId(form.getJobId());
+                    pm.setNum(Integer.parseInt(map.get("num").toString()));
+                    pm.setTypeId(Integer.parseInt(map.get("id").toString()));
+                    pmList.add(pm);
+                }
+                mapper.addPaperModel(pmList);
+                System.out.println(1);
+                session.commit();
+                resultForm.setCode(Constant.CODE_SUCCESS);
             }
         }
         return GsonUtil.toJsonNoEncode(resultForm);

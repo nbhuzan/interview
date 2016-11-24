@@ -7,13 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>笔试管理</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
+    <link href="/css/haha.css" rel="stylesheet">
     <script src="/js/subject.js"></script>
     <script src="/js/pageModel.js"></script>
     <script src="/js/jquery-3.1.1.min.js"></script>
@@ -22,6 +21,14 @@
     <script src="/js/constant.js"></script>
     <script src="/js/manage.js"></script>
     <script src="/layer/layer.js"></script>
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
 
 </head>
@@ -118,6 +125,6 @@
 
 </div>
 
-
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
